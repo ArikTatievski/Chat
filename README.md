@@ -38,4 +38,14 @@ If you wish to send a private messege do it as a regular messege in the followin
 
 If you wish to download a file use the following syntax "filereq.file"
 
-Hope you find good usuage of this project!
+# Requirements
+- pygame installed
+- pickle installed
+
+# How the system works visually
+
+![image](https://user-images.githubusercontent.com/92720540/156797578-839c22df-a404-4f53-98ad-ddb79adf06a3.png)
+
+![image](https://user-images.githubusercontent.com/92720540/156797714-c8799803-a500-4c82-8c2a-c9d737ad81d4.png)
+
+# Hope you find good usuage of this project!
