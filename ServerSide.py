@@ -95,7 +95,6 @@ class Server:
                     currpack = pickle.dumps(currpack)
                     filePackets.append(currpack)
                     seq = seq + 1
-                    # print(f'Packet {seq} created')
         newUDP = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         newUDP.bind((self.ip,60000))
         msg, udpaddr = newUDP.recvfrom(1024)
@@ -107,7 +106,6 @@ class Server:
             for i in range(0,len(filePackets)):
                 newUDP.sendto(filePackets[i], udpaddr)
                 acknum = newUDP.recvfrom(1024)[0].decode()
-                # print(f'Sent {i} packet')
                 while int(acknum) is not i:
                     continue
         else:
@@ -116,7 +114,7 @@ class Server:
         filename = f'{file[0:i]}{self.filenum}{file[i:]}'
         newUDP.sendto(filename.encode(),udpaddr)
         self.filenum = self.filenum + 1
-        # self.pbroadcast(f'{file} was downloaded',index)
+        self.pbroadcast(f'{file} was downloaded',index)
         return
 
     # def sendFile2(self,file,index,howmuch):

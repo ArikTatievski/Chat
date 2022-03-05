@@ -179,7 +179,6 @@ class Client:
             curr = pickle.loads(curr)
             fileData.append(curr[1])
             newUDP.sendto(f'{curr[0]}'.encode(), (self.target_ip, 60000))
-            # print(f'{curr[0]} ack sent')
         filename = newUDP.recvfrom(1024)[0].decode()
         with open(filename,'wb',0) as fwrite:
             for k in range(0,len(fileData)):
