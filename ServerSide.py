@@ -103,11 +103,16 @@ class Server:
         acknum = -1
         if msg == 'ack2':
             newUDP.sendto(f'{len(filePackets)}'.encode(), udpaddr)
-            for i in range(0,len(filePackets)):
-                newUDP.sendto(filePackets[i], udpaddr)
-                acknum = newUDP.recvfrom(1024)[0].decode()
-                while int(acknum) is not i:
-                    continue
+            while len(filePackets) > 0:
+                newUDP.sendto(filePackets[0], udpaddr)
+                try:
+                    acknum = newUDP.recvfrom(1024)[0].decode()
+                except:
+                    pass
+                acknum = int(acknum)
+                curr = pickle.loads(filePackets[0])
+                if curr[0] == acknum:
+                    filePackets.pop(0)
         else:
             pass
         i = file.index('.')

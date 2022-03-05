@@ -166,7 +166,7 @@ class Client:
             i = i + 25
 
     def receive_file(self):
-        fileData = []
+        fileData = {}
         newUDP = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         time.sleep(0.5)
         newUDP.sendto("ack".encode(),(self.target_ip,60000))
@@ -174,10 +174,10 @@ class Client:
         newUDP.sendto("ack2".encode(), (self.target_ip, 60000))
         numofPackets = newUDP.recvfrom(1024)[0].decode()
         numofPackets = int(numofPackets)
-        for i in range(0,numofPackets):
+        while (numofPackets != len(fileData)):
             curr = newUDP.recvfrom(1024)[0]
             curr = pickle.loads(curr)
-            fileData.append(curr[1])
+            fileData[curr[0]] = curr[1]
             newUDP.sendto(f'{curr[0]}'.encode(), (self.target_ip, 60000))
         filename = newUDP.recvfrom(1024)[0].decode()
         with open(filename,'wb',0) as fwrite:
