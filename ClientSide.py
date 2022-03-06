@@ -72,27 +72,6 @@ class Client:
                         newmsg = ''
                         receive_thread = threading.Thread(target=self.receive_file()).start()
 
-                    # if downloadWindow2.collidepoint(click_x, click_y):
-                    #     if newmsg == '' and receive_thread2.is_alive():
-                    #         UDP = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                    #         UDP.sendto("continue".encode(), (self.target_ip, 60000))
-                    #         UDP.close()
-                    #     howmuch = 0
-                    #     try:
-                    #         howmuch = newmsg[0:2]
-                    #         howmuch = int(howmuch)
-                    #     except:
-                    #         self.oldmsg.append("To download please write PRECENT.filereq.'FILENAME'")
-                    #         newmsg = ''
-                    #         break
-                    #     if newmsg[2:10] != 'filereq.' or howmuch<0 or howmuch>100 or not self.files.__contains__(newmsg[10:]):
-                    #         self.oldmsg.append("To download please write PRECENT.filereq.'FILENAME'")
-                    #         newmsg= ''
-                    #         break
-                    #     self.s.send(newmsg.encode())
-                    #     newmsg = ''
-                    #     receive_thread2 = threading.Thread(target=self.receive_file()).start()
-
                     #A regular messege option
                     if sendWindow.collidepoint(click_x, click_y):
                         if len(newmsg) == 0:

@@ -25,7 +25,6 @@ class Server:
                 print("Couldn't bind to that port")
 
         self.connections = []
-        self.files =[]
         files.append('file.txt')
         files.append('largerFile.txt')
         self.filenum = 0
@@ -102,8 +101,10 @@ class Server:
         msg = newUDP.recvfrom(1024)[0].decode()
         acknum = -1
         if msg == 'ack2':
+            z=1
             newUDP.sendto(f'{len(filePackets)}'.encode(), udpaddr)
             while len(filePackets) > 0:
+                z+=1
                 newUDP.sendto(filePackets[0], udpaddr)
                 try:
                     acknum = newUDP.recvfrom(1024)[0].decode()
@@ -121,60 +122,6 @@ class Server:
         self.filenum = self.filenum + 1
         self.pbroadcast(f'{file} was downloaded',index)
         return
-
-    # def sendFile2(self,file,index,howmuch):
-    #     filePackets = []
-    #     seq = 0
-    #     filesize = os.path.getsize(file)
-    #     sizeToRead = 1000
-    #     if filesize < sizeToRead:
-    #         sizeToRead = 1
-    #     with open(file,'rb',0) as f:
-    #         while True:
-    #             curr = f.read(sizeToRead)
-    #             if not curr:
-    #                 break
-    #             else:
-    #                 currpack = (seq,curr)
-    #                 currpack = pickle.dumps(currpack)
-    #                 filePackets.append(currpack)
-    #                 seq = seq + 1
-    #                 print(f'Packet {seq} created')
-    #     howmuch = int(howmuch)
-    #     howmuch = howmuch / 100
-    #     howmuch = int(len(filePackets) * howmuch)
-    #     newUDP = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-    #     newUDP.bind((self.ip,60000))
-    #     msg, udpaddr = newUDP.recvfrom(1024)
-    #     newUDP.sendto('SYNACK'.encode(), udpaddr)
-    #     msg = newUDP.recvfrom(1024)[0].decode()
-    #     acknum = -1
-    #     if msg == 'ack2':
-    #         newUDP.sendto(f'{len(filePackets)}'.encode(), udpaddr)
-    #         for i in range(0,howmuch):
-    #             newUDP.sendto(filePackets[i], udpaddr)
-    #             acknum = newUDP.recvfrom(1024)[0].decode()
-    #             print(f'Sent {i} packet')
-    #             while int(acknum) is not i:
-    #                 continue
-    #     else:
-    #         pass
-    #     msg = newUDP.recvfrom(1024)[0].decode()
-    #     if msg == 'continue':
-    #         for i in range(howmuch,len(filePackets)):
-    #             newUDP.sendto(filePackets[i], udpaddr)
-    #             acknum = newUDP.recvfrom(1024)[0].decode()
-    #             print(f'Sent {howmuch+i} packet')
-    #             while int(acknum) is not i:
-    #                 continue
-    #     else:
-    #         pass
-    #     i = file.index('.')
-    #     filename = f'{file[0:i]}{self.filenum}{file[i:]}'
-    #     newUDP.sendto(filename.encode(),udpaddr)
-    #     self.filenum = self.filenum + 1
-    #     self.pbroadcast(f'{file} was downloaded',index)
-    #     return
 
     #Infinite loop handling a spasific client
     def handle_client(self, c):
@@ -202,14 +149,6 @@ class Server:
                             if f == data:
                                 file = f
                         threading.Thread(target=self.sendFile, args=(file,index)).start()
-                    elif data[2:10] == 'filereq.':
-                        index = self.connections.index(c)
-                        howmuch = data[0:2]
-                        data = data[10:]
-                        for f in files:
-                            if f == data:
-                                file = f
-                        threading.Thread(target=self.sendFile2, args=(file, index,howmuch)).start()
                     #This is a regular messege
                     else:
                         self.broadcast(data)
